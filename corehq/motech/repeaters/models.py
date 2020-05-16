@@ -114,7 +114,6 @@ from corehq.motech.const import (
     OAUTH1,
 )
 from corehq.motech.models import ConnectionSettings
-from corehq.motech.requests import Requests
 from corehq.motech.utils import b64_aes_decrypt
 from corehq.util.metrics import metrics_counter
 from corehq.util.quickcache import quickcache
@@ -988,27 +987,6 @@ def _is_response(duck):
     instance that this module uses, otherwise False.
     """
     return hasattr(duck, 'status_code') and hasattr(duck, 'reason')
-
-
-# TODO: Repeaters to use ConnectionSettings
-def get_requests(
-    repeater: Repeater,
-    payload_id: Optional[str] = None,
-) -> Requests:
-    """
-    Returns a Requests object instantiated with properties of the given
-    Repeater. ``payload_id`` specifies the payload that the object will
-    be used for sending, if applicable.
-    """
-    auth_manager = repeater.get_auth_manager()
-    return Requests(
-        repeater.domain,
-        repeater.url,
-        verify=repeater.verify,
-        auth_manager=auth_manager,
-        notify_addresses=repeater.notify_addresses,
-        payload_id=payload_id,
-    )
 
 
 # import signals
