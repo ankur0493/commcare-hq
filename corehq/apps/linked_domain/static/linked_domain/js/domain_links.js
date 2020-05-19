@@ -15,7 +15,7 @@ hqDefine("linked_domain/js/domain_links", [
     _private.RMI = function () {};
 
     var ModelStatus = function (data) {
-        var self = this;
+        var self = {};
         self.type = data.type;
         self.name = data.name;
         self.last_update = ko.observable(data.last_update);
@@ -46,6 +46,8 @@ hqDefine("linked_domain/js/domain_links", [
                     self.showSpinner(false);
                 });
         };
+
+        return self;
     };
 
     var DomainLinksViewModel = function (data) {
@@ -63,9 +65,9 @@ hqDefine("linked_domain/js/domain_links", [
         self.can_update = data.can_update;
         self.models = data.models;
 
-        self.model_status = _.map(data.model_status, function (model_status) {
-            return new ModelStatus(model_status);
-        });
+        self.model_status = _.map(data.model_status, ModelStatus);
+
+        self.master_model_status = _.map(data.master_model_status, ModelStatus);
 
         self.linked_domains = ko.observableArray(_.map(data.linked_domains, function (link) {
             return new DomainLink(link);
